@@ -37,6 +37,12 @@ class Preprocess(Command):
 
         header = 'Arduino.h' if self.e.arduino_lib_version.major else 'WProgram.h'
         out.write('#include <%s>\n' % header)
+
+        lines = sketch.splitlines()
+        for line in lines:
+            if line.startswith("#include"):
+                out.write(line + '\n')
+                
         out.write('\n'.join(self.prototypes(sketch)))
         out.write('\n#line 1 "%s"\n' % args.sketch)
         out.write(sketch)
